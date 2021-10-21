@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Same MP4 file with AAC HQ]
+@="&Video to Same MP4 file with AAC HQ"
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Same MP4 file with AAC HQ\command]
+@="\"E:\\Projects\\degitx\\scripts\\windows\\menu\\ffmpeg_mp4_same_hq.cmd\" \"%1\""

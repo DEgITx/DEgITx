@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Audio to MP3]
+@="&Audio to MP3"
+
+[HKEY_CLASSES_ROOT\*\shell\Audio to MP3\command]
+@="\"E:\\Dropbox\\ffmpeg_mp3.cmd\" \"%1\""

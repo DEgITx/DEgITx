@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Same MP4 Cut Part]
+@="&Video to Same MP4 Cut Part"
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Same MP4 Cut Part\command]
+@="\"E:\\Dropbox\\ffmpeg_mp4_cutpart.cmd\" \"%1\""

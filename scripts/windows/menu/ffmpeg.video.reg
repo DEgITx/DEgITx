@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Raw MP4]
+@="&Video to Raw MP4"
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Raw MP4\command]
+@="\"E:\\Dropbox\\ffmpeg_video.cmd\" \"%1\""

@@ -1,0 +1,1 @@
+ffmpeg -i %1 -c:v libx264 -preset slow -crf 15 -c:a flac %~n1.mkv

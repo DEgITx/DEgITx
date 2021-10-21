@@ -1,0 +1,1 @@
+"d:\Program Files\FFMpeg_aac\ffmpeg.exe" -i %1 -c:v libx264 -crf 21 -c:a libfdk_aac -vbr 3 %~n1_same.mp4

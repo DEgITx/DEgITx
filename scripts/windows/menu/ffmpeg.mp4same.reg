@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Same MP4 file with AAC]
+@="&Video to Same MP4 file with AAC"
+
+[HKEY_CLASSES_ROOT\*\shell\Video to Same MP4 file with AAC\command]
+@="\"E:\\Dropbox\\ffmpeg_mp4_same.cmd\" \"%1\""

@@ -1,0 +1,1 @@
+ffmpeg -i %1 -ar 44100 -ab 320k -sample_fmt s16p %~n1.mp3
