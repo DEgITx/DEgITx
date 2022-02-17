@@ -11,7 +11,7 @@
   timeval curTime;\
   char timebuffer[28];\
   gettimeofday(&curTime, NULL);\
-  strftime(timebuffer, 28, "%H:%M:%S", localtime(&curTime.tv_sec));\
+  strftime(timebuffer, 28, "%H:%M:%S", localtime((time_t*)&curTime.tv_sec));\
 \
   fprintf(out, "[%s:%03ld] [%s] %s:%d: %s: " msg "\n", timebuffer, curTime.tv_usec / 1000, "\x1B[" color "m" type "\033[0m", __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__);\
 }
