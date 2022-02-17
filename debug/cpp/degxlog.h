@@ -71,4 +71,17 @@ static uint64_t DXGetMiliTime()
   }
 
 
-
+#define DX_BENCHMARK_FIRST(dx_nano_timer_tag) uint64_t start_benchmark1_##dx_nano_timer_tag = DXGetSystemNanoTime();
+#define DX_BENCHMARK_SECOND(dx_nano_timer_tag) \
+  uint64_t diff_benchmark1_##dx_nano_timer_tag = DXGetSystemNanoTime() - start_benchmark1_##dx_nano_timer_tag; \
+  uint64_t start_benchmark2_##dx_nano_timer_tag = DXGetSystemNanoTime();
+#define DX_BENCHMARK_END(dx_nano_timer_tag) \
+  uint64_t diff_benchmark2_##dx_nano_timer_tag = DXGetSystemNanoTime() - start_benchmark2_##dx_nano_timer_tag; \
+  int64_t diff_benchmarks_##dx_nano_timer_tag = diff_benchmark1_##dx_nano_timer_tag - diff_benchmark2_##dx_nano_timer_tag; \
+  if (diff_benchmarks_##dx_nano_timer_tag >= 1000 * 1000) { \
+    DX_INFO("%s%f ms ["#dx_nano_timer_tag"]", diff_benchmarks_##dx_nano_timer_tag > 0 ? "-" : "+", (double)diff_benchmarks_##dx_nano_timer_tag / 1000000); \
+  } else if(diff_benchmarks_##dx_nano_timer_tag >= 1000) { \
+    DX_INFO("%s%f qs ["#dx_nano_timer_tag"]", diff_benchmarks_##dx_nano_timer_tag > 0 ? "-" : "+", (double)diff_benchmarks_##dx_nano_timer_tag / 1000); \
+  } else { \
+    DX_INFO("%s%f ns ["#dx_nano_timer_tag"]", diff_benchmarks_##dx_nano_timer_tag > 0 ? "-" : "+", diff_benchmarks_##dx_nano_timer_tag); \
+  }
