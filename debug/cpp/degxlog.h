@@ -6,20 +6,68 @@
 #include <string.h>
 #include <sys/time.h>
 
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#define DX_PRINTF(out, color, type, msg, ...) {\
+#define DX_COLORFUL 1
+
+#ifdef DX_COLORFUL
+
+inline int DX_STRING_HASH(const char* str)
+{
+  int hash = 0;
+  for (; *str; ++str)
+  {
+    hash  = ((hash << 5) - hash) + *str;
+  }
+  return hash;
+}
+
+#define DX_PRINTF(out, tag, level, msg, ...) {\
   timeval curTime;\
+  time_t rawtime;\
   char timebuffer[28];\
   gettimeofday(&curTime, NULL);\
-  strftime(timebuffer, 28, "%H:%M:%S", localtime((time_t*)&curTime.tv_sec));\
+  rawtime = curTime.tv_sec;\
+  strftime(timebuffer, 28, "%H:%M:%S", localtime(&rawtime));\
+  \
+  char color[32] = {0}; \
+  short color_pick = DX_STRING_HASH(tag) % (232 - 16 + 1) + 16; \
+  sprintf(color, "\x1b[38;5;%dm", color_pick); \
+  char color_clear[] = "\x1b[0m"; \
+  \
+  char text_color[16] = { 0 };\
+  char text_clear[16] = { 0 };\
+  if (level == 0) {\
+    sprintf(text_color, "\x1b[38;5;%dm", 1);\
+    sprintf(text_clear, "\x1b[0m");\
+  } else if (level == 1) {\
+    sprintf(text_color, "\x1b[38;5;%dm", 3);\
+    sprintf(text_clear, "\x1b[0m");\
+  }\
+  fprintf(out, "[%s:%03ld] %s[%s]%s %s" msg "%s\n", timebuffer, curTime.tv_usec / 1000, color, tag, color_clear, text_color, ##__VA_ARGS__, text_clear);\
+}
+
+#define DX_ERROR(tag, ...) DX_PRINTF(stderr, tag, 0, ##__VA_ARGS__)
+#define DX_WARN(tag, ...) DX_PRINTF(stdout, tag, 1, ##__VA_ARGS__)
+#define DX_INFO(tag, ...) DX_PRINTF(stdout, tag, 2, ##__VA_ARGS__)
+#define DX_DEBUG(tag, ...) DX_PRINTF(stdout, tag, 3, ##__VA_ARGS__)
+
+#else // DX_COLORFUL
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define DX_PRINTF(out, tag, color, type, msg, ...) {\
+  timeval curTime;\
+  time_t rawtime;\
+  char timebuffer[28];\
+  gettimeofday(&curTime, NULL);\
+  rawtime = curTime.tv_sec;\
+  strftime(timebuffer, 28, "%H:%M:%S", localtime(&rawtime));\
 \
   fprintf(out, "[%s:%03ld] [%s] %s:%d: %s: " msg "\n", timebuffer, curTime.tv_usec / 1000, "\x1B[" color "m" type "\033[0m", __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__);\
 }
 
-#define DX_ERROR(...) DX_PRINTF(stderr, "31", "E", ##__VA_ARGS__)
-#define DX_WARN(...) DX_PRINTF(stdout, "33", "W", ##__VA_ARGS__)
-#define DX_INFO(...) DX_PRINTF(stdout, "32", "I", ##__VA_ARGS__)
-#define DX_DEBUG(...) DX_PRINTF(stdout, "36", "D", ##__VA_ARGS__)
+#define DX_ERROR(tag, ...) DX_PRINTF(stderr, tag, "31", "E", ##__VA_ARGS__)
+#define DX_WARN(tag, ...) DX_PRINTF(stdout, tag, "33", "W", ##__VA_ARGS__)
+#define DX_INFO(tag, ...) DX_PRINTF(stdout, tag, "32", "I", ##__VA_ARGS__)
+#define DX_DEBUG(tag, ...) DX_PRINTF(stdout, tag, "36", "D", ##__VA_ARGS__)
+#endif // DX_COLORFUL
 
 static uint64_t DXGetSystemNanoTime()
 {
